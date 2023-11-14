@@ -3,6 +3,7 @@ package com.example.translatorproject;
 import com.darkprograms.speech.translator.GoogleTranslate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.*;
@@ -21,18 +22,26 @@ public class TranslatorService {
     }
 
     public static String getImageLinksByKeyword(String keyword) {
-        String url = "https://www.peakpx.com/en/search?q=" + keyword;
+        String url = String.format("https://www.iconfinder.com/search?q=%s&price=free",keyword);
+        List<String> directImageLinks = new ArrayList<>();
         Document doc = null;
         boolean successConnect = false;
-        List<String> imageLinks = new ArrayList<>();
         while (!successConnect) {
             try {
                 doc = Jsoup.connect(url).get();
                 successConnect = true;
-            } catch (IOException e) {}
+            } catch (IOException e) {
+
+            }
         }
-        Elements figures = doc.select("figure");
-        return figures.get(0).selectFirst("link").attr("href");
+        Elements images = doc.select("img");
+        for (Element image : images) {
+            String imageUrl = image.absUrl("src");
+            if (imageUrl.endsWith("png")){
+                directImageLinks.add(imageUrl);
+            }
+        }
+        return directImageLinks.get(0);
     }
 
     public static List<String> separateWords(String sentence){
