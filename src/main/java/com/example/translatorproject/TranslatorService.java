@@ -52,7 +52,7 @@ public class TranslatorService {
     public static Map getImageLinkPerWord(String firstSentence){
         String translatedSentence = translateText(firstSentence);
         List<String> separateWords = separateWords(translatedSentence);
-        Map<String,String> wordAndLink = new TreeMap<>();
+        Map<String,String> wordAndLink = new LinkedHashMap<>();
         for (String word: separateWords){
             wordAndLink.put(word,getImageLinksByKeyword(word));
         }
